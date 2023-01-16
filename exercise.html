@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>4 Ways Exercise</title>
+    <style>
+      h1,
+      p {
+        text-align: center;
+      }
+
+      p {
+        font-size: 1.3rem;
+      }
+
+      .container {
+        margin-top: 50px;
+        display: flex;
+        justify-content: space-around;
+      }
+
+      .container > button {
+        border: 1px solid aqua;
+        border-radius: 20px;
+        padding: 8px 30px;
+        background: none;
+        color: rgb(31, 151, 151);
+        font-weight: 500;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+      .container > button:hover {
+        background: aqua;
+        color: white;
+      }
+    </style>
+
+    <!-- jquery cdn link -->
+    <script
+      src="https://code.jquery.com/jquery-3.6.3.min.js"
+      integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- axios cdn link -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      //jquery
+      $(document).ready(function () {
+        $("#jquery").click(function () {
+          $.getJSON(url)
+            .done(function (data) {
+              displayQuote.innerText = data[0];
+            })
+            .fail(function () {
+              console.log("ERROR!");
+            });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Ron Swanson Quote Generator</h1>
+    <p>(4 ways of writing AJAX requests)</p>
+    <section class="container">
+      <button id="xhr">XHR</button>
+      <button id="fetch">Fetch</button>
+      <button id="jquery">jQuery</button>
+      <button id="axios">Axios</button>
+    </section>
+
+    <p id="quote">Quotes Goes Here...</p>
+
+    <!-- script -->
+    <script>
+      var url = "https://ron-swanson-quotes.herokuapp.com/v2/quotes";
+      var xhrBtn = document.querySelector("#xhr");
+      var fetchBtn = document.querySelector("#fetch");
+      var axiosBtn = document.querySelector("#axios");
+      var displayQuote = document.querySelector("#quote");
+
+      // XMLHttpRequest
+      xhrBtn.addEventListener("click", function () {
+        var XHR = new XMLHttpRequest();
+        XHR.onreadystatechange = function () {
+          if (XHR.readyState == 4 && XHR.status == 200) {
+            var quote = JSON.parse(XHR.responseText)[0];
+            displayQuote.innerText = quote;
+          }
+        };
+
+        XHR.open("GET", url);
+        XHR.send();
+      });
+
+      //fetch
+      fetchBtn.addEventListener("click", function () {
+        fetch(url)
+          .then(function (req) {
+            req.json().then(function (data) {
+              displayQuote.innerText = data[0];
+            });
+          })
+          .catch(function () {
+            alert("ERROR!");
+          });
+      });
+
+      //axios
+      axiosBtn.addEventListener("click", function () {
+        axios
+          .get(url)
+          .then(function (res) {
+            displayQuote.innerText = res.data[0];
+          })
+          .catch(function () {
+            alert("ERROR!");
+          });
+      });
+    </script>
+  </body>
+</html>

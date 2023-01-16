@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Random Texts & Cats Generator</title>
+
+    <!-- script -->
+    <script
+      src="https://code.jquery.com/jquery-3.6.3.min.js"
+      integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      // $.ajax
+      //$.get
+      //$.getJSON
+      //random texts
+      $(document).ready(function () {
+        $("#btn").click(function () {
+          $.ajax({
+            method: "GET",
+            url: "https://baconipsum.com/api/?type=meat-and-filler",
+            dataType: "json",
+          })
+            .done(addPara)
+            .fail(function () {
+              alert("OH NO! FAILED!");
+            });
+        });
+
+        function addPara(data) {
+          $("p").text(data[0]);
+        }
+      });
+
+      //random cats script
+      $(document).ready(function () {
+        $("#catBtn").click(function () {
+          $.getJSON("https://random.cat/meow")
+            .done(function (data) {
+              $("#catImg").attr("src", data.file);
+            })
+            .fail(function () {
+              console.log("REQUEST IS NOT POSSIBLE");
+            });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    //random texts
+    <h1>Random Text Generator</h1>
+    <p></p>
+    <button id="btn">Click Here</button>
+    //random cats
+    <button id="catBtn">Click Me</button>
+    <img id="catImg" src="http://random.cat/i/urYhUVm.jpg" alt="" />
+  </body>
+</html>

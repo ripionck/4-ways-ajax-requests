@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Random Profile</title>
+
+    <!-- css -->
+    <style></style>
+  </head>
+  <body>
+    <h1 class="title">Random User Generator</h1>
+    <div class="user-profile">
+      <img
+        id="avatar"
+        src="https://randomuser.me/api/portraits/med/men/72.jpg"
+        alt="avatar"
+      />
+      <div id="fullname">Mr Christian Jiménez</div>
+      <div id="username">yellowgoose520</div>
+      <div class="description">
+        <div>Email: <span id="email">christian.jimenez@example.com</span></div>
+        <div>City: <span id="city">Las Palmas de Gran Canaria</span></div>
+      </div>
+      <div class="footer">
+        <button id="btn">Next User!</button>
+      </div>
+    </div>
+
+    <!-- script -->
+    <script>
+      var fullNameDis = document.querySelector("#fullname");
+      var avatar = document.querySelector("#avatar");
+      var emailDis = document.querySelector("#email");
+      var usernameDis = document.querySelector("#username");
+      var cityDis = document.querySelector("#city");
+      var url = "https://randomuser.me/api/";
+
+      var btn = document.querySelector("#btn");
+      btn.addEventListener("click", function () {
+        fetch(url)
+          .then(handleErrors)
+          .then(parseJSON)
+          .then(updateProfile)
+          .catch(displayErrors);
+      });
+
+      function handleErrors(res) {
+        if (!res.ok) {
+          throw Error(res.status);
+        }
+        return res;
+      }
+
+      function parseJSON(res) {
+        return res.json().then(function (parsedData) {
+          return parsedData.results[0];
+        });
+      }
+
+      function updateProfile(data) {
+        var fullname =
+          data.name.title + " " + data.name.first + " " + data.name.last;
+        fullNameDis.innerText = fullname;
+        avatar.src = data.picture.medium;
+        emailDis.innerText = data.email;
+        usernameDis.innerText = data.login.username;
+        cityDis.innerText = data.location.city;
+      }
+
+      function displayErrors(err) {
+        console.log(err);
+      }
+    </script>
+  </body>
+</html>
